@@ -3,15 +3,11 @@ default:
   from: 0
   emoji: "😃"
 cpu: 
-- from: 30
-  emoji: "🙂"
 - from: 50
   emoji: "🤒"
 - from: 90
   emoji: "🥵"
 ram: 
-- from: 30
-  emoji: "🙂"
 - from: 50
   emoji: "🤢"
 - from: 90
