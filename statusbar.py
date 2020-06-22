@@ -43,16 +43,19 @@ def get_emoji(emojis: List[dict], percent: int) -> dict:
 
 # get system stats for cpu and memory
 ram_percent = psutil.virtual_memory().percent
-cpu_percent = psutil.cpu_percent()
+# get the most stressed core
+cpu_percent = max(psutil.cpu_percent(percpu=True))
 # find out which emojis matches state of the system
 ram_emoji = get_emoji(emojis['ram'], ram_percent)
 cpu_emoji = get_emoji(emojis['cpu'], cpu_percent)
+# battery is inversed, cause higher is better
+bat_emoji = get_emoji(emojis['bat'], 100-int(battery))
 # find the most critical emoji
-emoji_options = [ram_emoji, cpu_emoji]
+emoji_options = [ram_emoji, cpu_emoji, bat_emoji]
 emoji = max(emoji_options, key=lambda e: e['from'])['emoji']
 
 
 time = datetime.now().strftime('%H:%M:%S')
 ip = socket.gethostbyname(socket.gethostname())
 
-print(f'{warning.ljust(52)}{ip}    {battery_icon}{battery}%    {time}  {emoji}')
+print(f'{warning.ljust(60)}{ip}    {battery_icon}{time}  {emoji}')

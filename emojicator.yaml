@@ -2,6 +2,21 @@
 default: 
   from: 0
   emoji: "😃"
+bat:
+- from: 90
+  emoji: "😴"
+- from: 80
+  emoji: "🥱"
+- from: 70
+  emoji: "😒"
+- from: 50
+  emoji: "😐"
+- from: 30
+  emoji: "🙂"
+- from: 20
+  emoji: "😊"
+- from: 10
+  emoji: "😃"
 cpu: 
 - from: 50
   emoji: "🤒"
