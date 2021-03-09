@@ -22,9 +22,9 @@ with open('/sys/class/power_supply/BAT0/status') as f:
 # ░█▀▄░█▀█░░█░░░█░░█▀▀░█▀▄░░█░
 # ░▀▀░░▀░▀░░▀░░░▀░░▀▀▀░▀░▀░░▀░
 warning = ''
-if int(battery) < 10 and not charging:
+if int(battery) <= 10 and not charging:
     warning = '⚠️ LOW BATTERY ⚠️ '
-if int(battery) > 90 and charging:
+if int(battery) >= 90 and charging:
     warning = '⚠️ FULL BATTERY ⚠️ '
 
 
@@ -60,7 +60,7 @@ emoji_options = [ram_emoji, cpu_emoji, bat_emoji]
 emoji = max(emoji_options, key=lambda e: e['from'])['emoji']
 
 
-time = datetime.now().strftime('%H:%M:%S')
+time = datetime.now().strftime('%d/%m  %H:%M:%S')
 ip = socket.gethostbyname(socket.gethostname())
 # hex_code = f'{ord(emoji):x}'
 # path = Path(f'/home/kofoednielsen/dotfiles/emojis/{hex_code}.png')
