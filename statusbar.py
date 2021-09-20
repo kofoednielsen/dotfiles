@@ -11,8 +11,8 @@ import psutil
 
 RED_B = '\033[41m'
 END = '\033[0m'
-battery = ""
-chargin = ""
+battery = "50"
+charging = ""
 with open('/sys/class/power_supply/BAT0/capacity') as f:
     battery = f.read().strip()
 with open('/sys/class/power_supply/BAT0/status') as f:
@@ -54,6 +54,7 @@ ram_emoji = get_emoji(emojis['ram'], ram_percent)
 cpu_emoji = get_emoji(emojis['cpu'], cpu_percent)
 # battery is inversed, cause higher is better
 bat_emoji = get_emoji(emojis['bat'], 100-int(battery))
+charging_emoji = '⚡' if charging else ' '
 
 # find the most critical emoji
 emoji_options = [ram_emoji, cpu_emoji, bat_emoji]
@@ -73,4 +74,4 @@ ip = socket.gethostbyname(socket.gethostname())
 # open('/home/kofoednielsen/dotfiles/background.png', 'wb').write(emoji_img)
 # system("swaymsg output '*' background /home/kofoednielsen/dotfiles/background.png center")
 
-print(f'{warning.ljust(60)}{ip}    {time}    {emoji}')
+print(f'{warning.ljust(60)}{ip}    {time}    {charging_emoji}{emoji}')
