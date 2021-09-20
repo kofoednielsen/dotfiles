@@ -1,0 +1,10 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  tag-commit:
+    name: Tag commit with version
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Test math"
+        run: echo -e "${{1 + 2}}"
