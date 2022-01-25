@@ -1,0 +1,17 @@
+on:
+  workflow_dispatch:
+    inputs:
+      release_notes:
+        description: 'Release notes'
+        required: true
+
+
+jobs:
+  newline-test:
+    name: Newline test
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Echo input"
+        run: echo -e "$RELEASE_NOTES"
+    env:
+      RELEASE_NOTES: ${{ github.event.inputs.release_notes }}
