@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "test"
-        run: echo docker.dev.job.dk:5111/${{ github.event.repository.name }}:${{steps.meta.outputs.labels}}
+        run: echo docker.dev.job.dk:5111/${{ github.event.repository.name }}:${{steps.meta.outputs.tags}}
