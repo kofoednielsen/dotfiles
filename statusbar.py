@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 from datetime import datetime
 from os import system
 from pathlib import Path
@@ -78,7 +78,7 @@ for i in netifaces.interfaces(): #Will cycle through all available interfaces an
         except:
             pass
 if_map = { 'wlp0s20f3': 'wifi', 'enx186571fd5e15': 'lan' }
-ip_str = "    ".join(f'{if_map.get(i, i)}: {ip}' for i, ip in ips)
+ip_str = "    ".join(f'{if_map.get(i, i)}: {ip}'for i, ip in ips if i in if_map )
 
 # PRINT OUTPUT
 print(f'{warning.ljust(45)}{ip_str}    {time}    {charging_emoji}{emoji}')
