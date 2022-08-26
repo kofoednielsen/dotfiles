@@ -105,15 +105,15 @@ if swaybg_emoji_file.is_file():
             exit()
          
 
-swaybg = Popen(["swaybg", "-i", emoji_path, "-m", "center", "-c", "#005063"])
-sleep(0.1)
-if swaybg_pid_file.is_file():
-    with open(swaybg_pid_file) as f:
-        pid = int(f.read())
-        try:
-            os.kill(pid, signal.SIGINT)
-        except: 
-            pass
-open(swaybg_pid_file, "w").write(str(swaybg.pid))
-open(swaybg_emoji_file, "w").write(str(hex_code))
+# swaybg = Popen(["swaybg", "-i", emoji_path, "-m", "center", "-c", "#005063"])
+# sleep(0.1)
+# if swaybg_pid_file.is_file():
+#     with open(swaybg_pid_file) as f:
+#         pid = int(f.read())
+#         try:
+#             os.kill(pid, signal.SIGINT)
+#         except: 
+#             pass
+# open(swaybg_pid_file, "w").write(str(swaybg.pid))
+# open(swaybg_emoji_file, "w").write(str(hex_code))
 
