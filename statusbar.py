@@ -77,7 +77,7 @@ for i in netifaces.interfaces(): #Will cycle through all available interfaces an
             ips.append((i, netifaces.ifaddresses(i)[netifaces.AF_INET][0]['addr']))
         except:
             pass
-if_map = { 'wlp0s20f3': 'wifi', 'enx186571fd5e15': 'lan' }
+if_map = { 'wlp9s0': 'wifi', 'enp0s31f6': 'lan' }
 ip_str = "    ".join(f'{if_map.get(i, i)}: {ip}'for i, ip in ips if i in if_map )
 
 # PRINT OUTPUT
