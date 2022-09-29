@@ -40,9 +40,9 @@ if int(battery) >= 90 and charging:
 # ░█▀▀░█░█░█░█░░░█░░█░░█░░░█▀█░░█░░█░█░█▀▄
 # ░▀▀▀░▀░▀░▀▀▀░▀▀░░▀▀▀░▀▀▀░▀░▀░░▀░░▀▀▀░▀░▀
 
-emojis = yaml.load(open(DOTFILES_FOLDER / "emojicator.yaml"),
+emojiconfig = yaml.load(open(DOTFILES_FOLDER / "emojicator.yaml"),
                    Loader=yaml.FullLoader)
-default_emoji = emojis['default']
+default_emoji = emojiconfig['default']
 
 
 def get_emoji(emojis: List[dict], percent: int) -> dict:
@@ -58,15 +58,15 @@ ram_percent = psutil.virtual_memory().percent
 cpu_percent = max(psutil.cpu_percent(interval=0.1, percpu=True))
 
 # find out which emojis matches state of the system
-ram_emoji = get_emoji(emojis['ram'], ram_percent)
-cpu_emoji = get_emoji(emojis['cpu'], cpu_percent)
+ram_emoji = get_emoji(emojiconfig['ram'], ram_percent)
+cpu_emoji = get_emoji(emojiconfig['cpu'], cpu_percent)
 # battery is inversed, cause higher is better
-bat_emoji = get_emoji(emojis['bat'], 100-int(battery))
+bat_emoji = get_emoji(emojiconfig['bat'], 100-int(battery))
 charging_emoji = '⚡' if charging else ' '
 
 # find the most critical emoji
 emoji_options = [ram_emoji, cpu_emoji, bat_emoji]
-emoji = max(emoji_options, key=lambda e: e['from'])['emoji']
+emojis = [e['emoji'] for e in reversed(sorted(emoji_options, key=lambda e: e['from']))][:2]
 
 
 time = datetime.now().strftime('%d/%m  %H:%M:%S')
@@ -77,21 +77,37 @@ for i in netifaces.interfaces(): #Will cycle through all available interfaces an
             ips.append((i, netifaces.ifaddresses(i)[netifaces.AF_INET][0]['addr']))
         except:
             pass
-if_map = { 'wlp9s0': 'wifi', 'enp0s31f6': 'lan' }
+if_map = { 'wlp9s0': 'wifi', 'enp0s31f6': 'lan', 'tun0': 'jobindex' }
 ip_str = "    ".join(f'{if_map.get(i, i)}: {ip}'for i, ip in ips if i in if_map )
 
 # PRINT OUTPUT
-print(f'{warning.ljust(45)}{ip_str}    {time}    {charging_emoji}{emoji}')
+print(f'{warning.ljust(45)}{ip_str}    {time}    {charging_emoji}{emojis[0]}')
 
 
 # HANDLE BACKGROUND
-hex_code = f'{ord(emoji):x}'
+hex_code = ''
+if emojis[0] == emojis[1]:
+    hex_code = f'{ord(emojis[0]):x}'
+else:
+    ordered = list(reversed(sorted(emojis)))
+    hex_code = f'u{ord(ordered[0]):x}_u{ord(ordered[1]):x}'
+
 emoji_path = DOTFILES_FOLDER / f"emojis/{hex_code}.png"
+
 if emoji_path.is_file():
     emoji_img = open(emoji_path, 'rb').read()
 else:
-    url = f"https://github.com/googlefonts/noto-emoji/raw/main/png/512/emoji_u{hex_code}.png"
-    emoji_img = get(url).content
+    emoji_img = None
+    if emojis[0] == emojis[1]:
+        url = f"https://github.com/googlefonts/noto-emoji/raw/main/png/512/emoji_u{hex_code}.png"
+        emoji_img = get(url).content
+    else:
+        url = f"https://tikolu.net/emojimix/get/https://www.gstatic.com/android/keyboard/emojikitchen/20201001/{hex_code.split('_')[0]}/{hex_code}.png"
+        emoji_img = get(url, headers={'x-v': '1'}).content
+        if not emoji_img:
+            hex_code = '_'.join(reversed(hex_code.split('_')))
+            url = f"https://tikolu.net/emojimix/get/https://www.gstatic.com/android/keyboard/emojikitchen/20201001/{hex_code.split('_')[0]}/{hex_code}.png"
+            emoji_img = get(url, headers={'x-v': '1'}).content
     open(emoji_path, 'wb').write(emoji_img)
 
 swaybg_pid_file = TMP / "swaybg_pid"
@@ -100,12 +116,12 @@ swaybg_emoji_file = TMP / "swaybg_emoji"
 # terminate early if background is already correct
 if swaybg_emoji_file.is_file():
     with open(swaybg_emoji_file) as f:
-        emoji = f.read()
-        if emoji == hex_code:
+        bg_emoji = f.read()
+        if bg_emoji == hex_code:
             exit()
          
 
-swaybg = Popen(["swaybg", "-i", emoji_path, "-m", "center", "-c", "#005063"])
+swaybg = Popen(["swaybg", "-i", emoji_path, "-m", "center"])
 sleep(0.1)
 if swaybg_pid_file.is_file():
     with open(swaybg_pid_file) as f:
