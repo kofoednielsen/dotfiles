@@ -1,38 +1,50 @@
 #! /bin/python3
 import curses
 from curses.textpad import Textbox, rectangle
-from string import ascii_letters;
+from string import ascii_letters, digits;
 import subprocess
+
+
+N_SEARCH_RESULTS = 10
 
 def emocli(stdscr):
     key = ''
     search = ''
     selected = 0
     while True:
+        curses.use_default_colors()
         stdscr.clear()
-        if key in ascii_letters:
-            search += key
-        elif key == 'KEY_UP':
+
+        if key and chr(key) in ascii_letters + ': ':
+            search += chr(key)
+        #escape 
+        elif key == 27:
+            return
+        elif key == curses.KEY_UP:
             selected = max(0, selected - 1) 
-        elif key == 'KEY_DOWN':
-            selected = min(4, selected + 1) 
-        elif key == 'KEY_BACKSPACE':
+        elif key == curses.KEY_DOWN:
+            selected = min(N_SEARCH_RESULTS-1, selected + 1) 
+        elif key == curses.KEY_BACKSPACE:
             search = search[0:-1]
+
         prompt = f"🔎️> {search}"
         stdscr.addstr(2, 5, prompt)
 
         if search:
-            lines = subprocess.Popen(["emocli", "search", search], stdout=subprocess.PIPE).communicate()[0].decode().split('\n')
-            if key == '\n':
-                return lines[selected][0]
+            lines = subprocess.Popen(["emocli", "search", search, '-n', str(N_SEARCH_RESULTS)], stdout=subprocess.PIPE).communicate()[0].decode().strip().split('\n')
+            if (key and chr(key) in digits and 
+                int(chr(key)) in range(N_SEARCH_RESULTS)):
+                selected = int(chr(key))
+                return lines[selected].split('\t')[0]
+            if key and chr(key) == '\n':
+                return lines[selected].split('\t')[0]
             for i, line in enumerate(lines):
-                if i == selected:
-                    stdscr.addstr(3+i, 5, line, curses.A_REVERSE)
-                else:
-                    stdscr.addstr(3+i, 5, line)
+                style = curses.A_REVERSE if i == selected else curses.A_NORMAL
+                stdscr.addstr(4+i, 5, f"{i} ", curses.A_BOLD | style)
+                stdscr.addstr(4+i, 7, line, style)
 
         stdscr.move(2, 5 + len(prompt))
-        key = stdscr.getkey()
+        key = stdscr.getch()
         stdscr.refresh()
 
 
