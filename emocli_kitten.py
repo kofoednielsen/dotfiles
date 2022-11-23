@@ -15,7 +15,7 @@ def emocli(stdscr):
         curses.use_default_colors()
         stdscr.clear()
 
-        if key and chr(key) in ascii_letters + ': ':
+        if key and chr(key) in ascii_letters + ': ' + digits:
             search += chr(key)
         #escape 
         elif key == 27:
@@ -32,15 +32,10 @@ def emocli(stdscr):
 
         if search:
             lines = subprocess.Popen(["emocli", "search", search, '-n', str(N_SEARCH_RESULTS)], stdout=subprocess.PIPE).communicate()[0].decode().strip().split('\n')
-            if (key and chr(key) in digits and 
-                int(chr(key)) in range(N_SEARCH_RESULTS)):
-                selected = int(chr(key))
-                return lines[selected].split('\t')[0]
             if key and chr(key) == '\n':
                 return lines[selected].split('\t')[0]
             for i, line in enumerate(lines):
                 style = curses.A_REVERSE if i == selected else curses.A_NORMAL
-                stdscr.addstr(4+i, 5, f"{i} ", curses.A_BOLD | style)
                 stdscr.addstr(4+i, 7, line, style)
 
         stdscr.move(2, 5 + len(prompt))
