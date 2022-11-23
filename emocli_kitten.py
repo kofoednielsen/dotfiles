@@ -22,8 +22,8 @@ def emocli(stdscr):
             return
         elif key == curses.KEY_UP:
             selected = max(0, selected - 1) 
-        elif key == curses.KEY_DOWN:
-            selected = min(N_SEARCH_RESULTS-1, selected + 1) 
+        elif key == curses.KEY_DOWN or key == ord('\t'): # tab
+            selected = (selected + 1) % N_SEARCH_RESULTS
         elif key == curses.KEY_BACKSPACE:
             search = search[0:-1]
 
