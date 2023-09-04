@@ -20,17 +20,17 @@ ps1_precmd() {
     fi
 
     # Are we in a git repo?
-    if git rev-parse 2>/dev/null; then
-        if [ -z "$(git status --porcelain)" ]; then
-          git_clean_indicator=""  # Working directory clean
-        else
-          git_clean_indicator=" ✘"  # Uncommitted changes
-        fi
-        ref_name=$(git name-rev --name-only --always HEAD)
-        git_prompt=" ${ref_name}${git_clean_indicator}"
-    else
-        git_prompt=""
-    fi
+    # if git rev-parse 2>/dev/null; then
+    #     if [ -z "$(git status --porcelain)" ]; then
+    #       git_clean_indicator=""  # Working directory clean
+    #     else
+    #       git_clean_indicator=" ✘"  # Uncommitted changes
+    #     fi
+    #     ref_name=$(git name-rev --name-only --always HEAD)
+    #     git_prompt=" ${ref_name}${git_clean_indicator}"
+    # else
+    #     git_prompt=""
+    # fi
 
     cwd_prompt='\w'
     if [ "$(id -u)" = "0" ]; then
