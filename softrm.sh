@@ -1,3 +1,4 @@
 #!/bin/sh
 mkdir -p /tmp/trashbin
-mv "$@" /tmp/trashbin
+cp --remove-destination "$@" /tmp/trashbin
+rm "$@"

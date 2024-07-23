@@ -1,0 +1,23 @@
+Ting som jeg har bygget i min fritid med eller uden venner:
+
+tunnel.pyjam.as (https://gitlab.com/pyjam.as/tunnel)
+  [Python, Caddy, WireGuard, Docker]
+  Gratis HTTP tunnel tjeneste a la https://ngrok.com 
+
+cloud.pyjam.as (https://gitlab.com/pyjam.as/cloud.pyjam.as)
+  [Python, Docker]
+  Meget proof-of-concept vps hosting med DNS som brugerflade. Man kunne skrive "ssh root@hvadsomehelst.cloud.pyjam.as" og derved ende på en personlig VPS
+
+Neighbot (https://github.com/kofoednielsen/neighbot)
+  [Python, Docker]
+  Discord/SMS bridge
+
+Quote Calculator (https://gitlab.com/kofoednielsen/quote-calculator)
+  [Python, Typescript, React, Docker]
+  Tilbudsberegner til entrepenør virksomhed. Har erstattet et meget stort excelark.
+
+Solar Controller (https://github.com/kofoednielsen/solar-controller)
+  [Python, Docker]
+  Lille program som kan styre et solcelle anlæg baseret på vejrudsigten
+
+Se mere på min GitHub https://github.com/kofoednielsen
